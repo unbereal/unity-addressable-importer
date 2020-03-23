@@ -11,6 +11,9 @@ public class AddressableImportSettings : ScriptableObject
     public const string kDefaultPath = "Assets/AddressableAssetsData/AddressableImportSettings.asset";
     
     [Tooltip("Creates a group if the specified group doesn't exist.")]
+    public UnityEngine.Object addressableFolder;
+    
+    [Tooltip("Creates a group if the specified group doesn't exist.")]
     public bool allowAssetProcess = true;
 
     [Tooltip("Creates a group if the specified group doesn't exist.")]

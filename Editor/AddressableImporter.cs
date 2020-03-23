@@ -199,6 +199,46 @@ public class AddressableImporter : AssetPostprocessor
             }
             return false;
         }
+
+        [MenuItem("Assets/AddressablesImporter: Check Addressable Folder(s)")]
+        public static void CheckAddressableFolders()
+        {
+            var importSettings = AddressableImportSettings.Instance;
+            if (importSettings.addressableFolder == null)
+            {
+                Deubg.LogError($"Addressable Importer : Not Found AddressableFolder.");
+                return;
+            }
+            HashSet<string> filesToImport = new HashSet<string>();
+            // Folders comes up as Object.
+            foreach (UnityEngine.Object obj in Selection.GetFiltered(typeof(UnityEngine.Object), importSettings.addressableFolder))
+            {
+                var assetPath = AssetDatabase.GetAssetPath(obj);
+                // Other assets may appear as Object, so a Directory Check filters directories from folders.
+                if (Directory.Exists(assetPath))
+                {
+                    var filesToAdd = Directory.GetFiles(assetPath, "*", SearchOption.AllDirectories);
+                    foreach (var file in filesToAdd)
+                    {
+                        // If Directory.GetFiles accepted Regular Expressions, we could filter the metas before iterating.
+                        if (!file.EndsWith(".meta") && !file.EndsWith(".DS_Store"))
+                        {
+                            filesToImport.Add(file.Replace('\\', '/'));
+                        }
+                    }
+                }
+            }
+
+            if (filesToImport.Count > 0)
+            {
+                Debug.Log($"AddressablesImporter: Found {filesToImport.Count} assets...");
+                OnPostprocessAllAssets(filesToImport.ToArray(), null, null, null);
+            }
+            else
+            {
+                Debug.Log($"AddressablesImporter: No files to reimport");
+            }
+        }
     }
 
 
