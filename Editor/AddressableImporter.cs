@@ -204,27 +204,24 @@ public class AddressableImporter : AssetPostprocessor
         public static void CheckAddressableFolders()
         {
             var importSettings = AddressableImportSettings.Instance;
-            if (importSettings.addressableFolder == null)
+            if (importSettings == null || importSettings.addressableFolder == null)
             {
-                Deubg.LogError($"Addressable Importer : Not Found AddressableFolder.");
+                Debug.LogError($"Addressable Importer : Not Found AddressableFolder.");
                 return;
             }
             HashSet<string> filesToImport = new HashSet<string>();
             // Folders comes up as Object.
-            foreach (UnityEngine.Object obj in Selection.GetFiltered(typeof(UnityEngine.Object), importSettings.addressableFolder))
+            var assetPath = AssetDatabase.GetAssetPath(importSettings.addressableFolder);
+            // Other assets may appear as Object, so a Directory Check filters directories from folders.
+            if (Directory.Exists(assetPath))
             {
-                var assetPath = AssetDatabase.GetAssetPath(obj);
-                // Other assets may appear as Object, so a Directory Check filters directories from folders.
-                if (Directory.Exists(assetPath))
+                var filesToAdd = Directory.GetFiles(assetPath, "*", SearchOption.AllDirectories);
+                foreach (var file in filesToAdd)
                 {
-                    var filesToAdd = Directory.GetFiles(assetPath, "*", SearchOption.AllDirectories);
-                    foreach (var file in filesToAdd)
+                    // If Directory.GetFiles accepted Regular Expressions, we could filter the metas before iterating.
+                    if (!file.EndsWith(".meta") && !file.EndsWith(".DS_Store"))
                     {
-                        // If Directory.GetFiles accepted Regular Expressions, we could filter the metas before iterating.
-                        if (!file.EndsWith(".meta") && !file.EndsWith(".DS_Store"))
-                        {
-                            filesToImport.Add(file.Replace('\\', '/'));
-                        }
+                        filesToImport.Add(file.Replace('\\', '/'));
                     }
                 }
             }
