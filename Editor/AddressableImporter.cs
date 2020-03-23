@@ -20,6 +20,11 @@ public class AddressableImporter : AssetPostprocessor
             Debug.LogFormat("[AddressableImporter] import settings file not found\nPlease go to Assets/AddressableAssetsData folder, right click in the project window and choose 'Create > Addressable Assets > Import Settings'.");
             return;
         }
+        if (!importSettings.allowAssetProcess)
+        {
+            Debug.LogFormat("[AddressableImporter] Disable ArrowAssetProcess.");
+            return;
+        }
         else if (importSettings.rules == null || importSettings.rules.Count == 0)
             return;
         var entriesAdded = new List<AddressableAssetEntry>();
