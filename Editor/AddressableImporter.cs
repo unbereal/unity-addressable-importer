@@ -10,7 +10,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using UnityEditor.AddressableAssets.Settings.GroupSchemas;
 
-public class AddressableImporter : AssetPostprocessor
+public class AddressableImporter : Editor 
 {
     static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
     {
@@ -18,11 +18,6 @@ public class AddressableImporter : AssetPostprocessor
         var importSettings = AddressableImportSettings.Instance;
         if (importSettings == null) {
             Debug.LogFormat("[AddressableImporter] import settings file not found\nPlease go to Assets/AddressableAssetsData folder, right click in the project window and choose 'Create > Addressable Assets > Import Settings'.");
-            return;
-        }
-        if (!importSettings.allowAssetProcess)
-        {
-            Debug.LogFormat("[AddressableImporter] Disable ArrowAssetProcess.");
             return;
         }
         else if (importSettings.rules == null || importSettings.rules.Count == 0)
@@ -237,6 +232,4 @@ public class AddressableImporter : AssetPostprocessor
             }
         }
     }
-
-
 }
