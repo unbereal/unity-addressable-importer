@@ -14,9 +14,6 @@ public class AddressableImportSettings : ScriptableObject
     public UnityEngine.Object addressableFolder;
     
     [Tooltip("Creates a group if the specified group doesn't exist.")]
-    public bool allowAssetProcess = true;
-
-    [Tooltip("Creates a group if the specified group doesn't exist.")]
     public bool allowGroupCreation = false;
 
     [Tooltip("Removes groups without addressables except the default group.")]
