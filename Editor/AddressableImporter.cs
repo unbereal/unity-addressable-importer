@@ -366,10 +366,12 @@ public class AddressableImporter : AssetPostprocessor
             {
                 Debug.Log($"AddressableImporter: Found {pathsToImport.Count} asset paths...");
 
+                /*Jenkinsでの自動化を行うにあたり、ダイアログの表示が自動化の妨げになるためコメントアウトしてあります
                 if (!EditorUtility.DisplayDialog("Process files?",
                                                  $"About to process {pathsToImport.Count} files and folders, is that OK?",
                                                  "Yes", "No"))
                     return;
+                */
 
                 OnPostprocessAllAssets(pathsToImport.ToArray(), new string[0], new string[0], new string[0]);
             }
